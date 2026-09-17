@@ -39,6 +39,12 @@ void ALab2PhysicsPlayerController::BeginPlay()
 		}
 
 	}
+
+	HUDWidget = CreateWidget<UHUDWidget>(this, HUDWidgetClass);
+	if (HUDWidget)
+	{
+		HUDWidget->AddToViewport();
+	}
 }
 
 void ALab2PhysicsPlayerController::SetupInputComponent()

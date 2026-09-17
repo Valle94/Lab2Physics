@@ -48,7 +48,11 @@ protected:
 	/** Mouse Look Input Action */
 	UPROPERTY(EditAnywhere, Category ="Input")
 	class UInputAction* MouseLookAction;
-	
+
+	// Shoot Action Recognition
+	UPROPERTY(EditAnywhere, Category = "Input")
+	class UInputAction* ShootAction;
+
 public:
 	ALab2PhysicsCharacter();
 
@@ -90,5 +94,8 @@ public:
 	/** Returns first person camera component **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+	// Function for Shoot (this ends up not being used)
+	UFUNCTION(BlueprintCallable)
+	void Shoot();
 };
 

@@ -59,6 +59,8 @@ void ALab2PhysicsCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		// Looking/Aiming
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ALab2PhysicsCharacter::LookInput);
 		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &ALab2PhysicsCharacter::LookInput);
+	
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &ALab2PhysicsCharacter::Shoot);
 	}
 	else
 	{
@@ -117,4 +119,10 @@ void ALab2PhysicsCharacter::DoJumpEnd()
 {
 	// pass StopJumping to the character
 	StopJumping();
+}
+
+void ALab2PhysicsCharacter::Shoot()
+{
+
+	// Pull the trigger of the gun
 }
