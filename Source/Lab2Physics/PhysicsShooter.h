@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Projectile.h"
 #include "PhysicsShooter.generated.h"
 
 
@@ -35,11 +36,34 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Shooting")
 	float ImpulseStrength = 5000.0f;
 
-	// Float for the impulse strength
 	UPROPERTY(EditAnywhere, Category = "Shooting")
 	bool VelChange = true;
+
+	UPROPERTY(EditAnywhere, Category = "Shooting")
+	int Ammo = 10;
+
+	UPROPERTY(EditAnywhere, Category = "Shooting")
+	float ReloadTime = 4.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Shooting")
+	float ReloadTimer = 0.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Shooting")
+	bool CanShoot = true;
+
+	// Create a member variable as a reference to our bullet
+	UPROPERTY(EditAnywhere, Category = "Shooting")
+	TSubclassOf<AProjectile> ProjectileClass;
 
 	// Function to shoot the physics ray; called using bluebrints. 
 	UFUNCTION(BlueprintCallable, Category = "Shooting")
 	void ShootRay();
+
+	// Function to shoot the physics ray; called using bluebrints. 
+	UFUNCTION(BlueprintCallable, Category = "Shooting")
+	void ShootBullet();
+
+	// Function to shoot the physics ray; called using bluebrints. 
+	UFUNCTION(BlueprintCallable, Category = "Shooting")
+	void Reload();
 };

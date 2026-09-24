@@ -53,6 +53,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputAction* ShootAction;
 
+	// Shoot Action Recognition
+	UPROPERTY(EditAnywhere, Category = "Input")
+	class UInputAction* ShootBulletAction;
+
 public:
 	ALab2PhysicsCharacter();
 

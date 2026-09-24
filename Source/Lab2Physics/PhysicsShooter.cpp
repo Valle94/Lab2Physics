@@ -4,6 +4,8 @@
 #include "PhysicsShooter.h"
 #include "Components/PrimitiveComponent.h"
 #include "GameFramework/Pawn.h"
+#include "Projectile.h"
+
 #include "GameFramework/Controller.h"
 
 // Sets default values for this component's properties
@@ -39,7 +41,10 @@ void UPhysicsShooter::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (ReloadTimer < ReloadTime and CanShoot == false)
+	{
+		ReloadTimer += DeltaTime;
+	}
 }
 
 // This function contains the full physics ray implementation including the 
@@ -94,3 +99,58 @@ void UPhysicsShooter::ShootRay()
 	}
 }
 
+void UPhysicsShooter::ShootBullet()
+{
+	if (Ammo > 1 and CanShoot)
+	{
+		FVector ViewPointLocation;
+		FRotator ViewPointRotation;
+		OwnerController->GetPlayerViewPoint(ViewPointLocation, ViewPointRotation);
+	
+		UE_LOG(LogTemp, Warning, TEXT("Camera Pitch: %f | Yaw: %f"), ViewPointRotation.Pitch, ViewPointRotation.Yaw);
+
+		float Offset = 100.0f;
+		FVector SpawnLocation = ViewPointLocation + (ViewPointRotation.Vector() * Offset);
+
+		UE_LOG(LogTemp, Warning, TEXT("Spawn Location: %s"), *SpawnLocation.ToString());
+
+		FQuat CameraQuat(ViewPointRotation);
+
+		FQuat LocalOffset(FRotator(0.0f, 0.0f, 0.0f));
+
+		FQuat FinalQuat = CameraQuat * LocalOffset;
+		FRotator FinalRotation = FinalQuat.Rotator();
+
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Instigator = OwnerController->GetPawn(); // Prevents self-collision with the player
+
+		GetWorld()->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, FinalRotation, SpawnParams);
+		Ammo -= 1;
+	}
+	else
+	{
+		Reload();
+	}
+}
+
+void UPhysicsShooter::Reload()
+{
+	if (CanShoot == true)
+	{
+		CanShoot = false;
+	}
+	else
+	{
+		if (ReloadTimer < ReloadTime)
+		{
+			UE_LOG(LogTemp, Display, TEXT("Ammo Empty"));
+		}
+		else
+		{
+			Ammo = 10;
+			CanShoot = true;
+			ReloadTimer = 0.0f;
+		}
+	}
+}
